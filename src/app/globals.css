@@ -5,6 +5,13 @@
   --color-caramel: #D4A373;
   --color-oat: #FDFBF7;
 
+  /* Example 2 Colors */
+  --color-coffice-bg: #111111;
+  --color-coffice-dark: #1A1412;
+  --color-coffice-text: #E8E2D9;
+  --color-coffice-gold: #D4AF37;
+  --color-coffice-copper: #B76E79;
+
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-playfair), ui-serif, Georgia, serif;
 }
