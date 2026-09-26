@@ -18,8 +18,9 @@ export default function Home() {
       const title = new SplitType("#hero-title", { types: "chars" });
       const sub = new SplitType("#hero-subtitle", { types: "words" });
       
-      gsap.to(title.chars, { y: 0, opacity: 1, stagger: 0.08, duration: 1.5, ease: "expo.out", delay: 0.2 });
-      gsap.to(sub.words, { y: 0, opacity: 1, stagger: 0.05, duration: 1.2, ease: "expo.out", delay: 1.0 });
+      // 改動：增加延遲 (delay) 與播放長度 (duration)，讓標題更從容地浮現
+      gsap.to(title.chars, { y: 0, opacity: 1, stagger: 0.15, duration: 2.5, ease: "expo.out", delay: 0.8 });
+      gsap.to(sub.words, { y: 0, opacity: 1, stagger: 0.1, duration: 2.0, ease: "expo.out", delay: 2.0 });
 
       // 2. Apple Sequence Animation
       const canvas = document.getElementById("scroll-canvas") as HTMLCanvasElement;
