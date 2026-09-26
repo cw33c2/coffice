@@ -60,16 +60,20 @@ export default function Home() {
           ease: "none",
           duration: 1,
           onUpdate: () => {
-            if (images[seq.frame] && images[seq.frame].complete) {
+            const currentImg = images[seq.frame];
+            if (currentImg && currentImg.complete) {
               canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-              canvasCtx.drawImage(images[seq.frame], 0, 0, canvas.width, canvas.height);
+              canvasCtx.drawImage(currentImg, 0, 0, canvas.width, canvas.height);
             }
           }
         }, 0);
 
-        images[0].onload = () => {
-          canvasCtx.drawImage(images[0], 0, 0, canvas.width, canvas.height);
-        };
+        const firstImg = images[0];
+        if (firstImg) {
+          firstImg.onload = () => {
+            canvasCtx.drawImage(firstImg, 0, 0, canvas.width, canvas.height);
+          };
+        }
 
         tlSequence.to("#video-text-1", { opacity: 1, duration: 0.1 }, 0.1)
                   .to("#video-text-1", { opacity: 0, duration: 0.1 }, 0.4)
