@@ -18,9 +18,15 @@ export default function Home() {
       const title = new SplitType("#hero-title", { types: "chars" });
       const sub = new SplitType("#hero-subtitle", { types: "words" });
       
-      // 改動：增加延遲 (delay) 與播放長度 (duration)，讓標題更從容地浮現
-      gsap.to(title.chars, { y: 0, opacity: 1, stagger: 0.15, duration: 2.5, ease: "expo.out", delay: 0.8 });
-      gsap.to(sub.words, { y: 0, opacity: 1, stagger: 0.1, duration: 2.0, ease: "expo.out", delay: 2.0 });
+      // 改動：強制先隱藏，然後等待 5 秒後才出現
+      gsap.fromTo(title.chars, 
+        { y: 50, opacity: 0 }, 
+        { y: 0, opacity: 1, stagger: 0.15, duration: 2.5, ease: "expo.out", delay: 5.0 }
+      );
+      gsap.fromTo(sub.words, 
+        { y: 20, opacity: 0 }, 
+        { y: 0, opacity: 1, stagger: 0.1, duration: 2.0, ease: "expo.out", delay: 6.0 }
+      );
 
       // 2. Apple Sequence Animation
       const canvas = document.getElementById("scroll-canvas") as HTMLCanvasElement;
@@ -113,8 +119,8 @@ export default function Home() {
       </section>
 
       {/* Sequence Scroll */}
-      <section className="video-section h-[300vh] relative">
-        <div className="sticky top-0 h-screen w-full overflow-hidden bg-black flex items-center justify-center">
+      <section className="video-section h-screen relative">
+        <div className="w-full h-full overflow-hidden bg-black flex items-center justify-center">
           <canvas id="scroll-canvas" className="w-full h-full object-cover opacity-70 max-w-full"></canvas>
           <div id="video-text-1" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white font-serif text-4xl md:text-6xl tracking-widest opacity-0 w-full text-center drop-shadow-2xl">每一個清晨，從純粹開始。</div>
           <div id="video-text-2" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white font-serif text-4xl md:text-6xl tracking-widest opacity-0 w-full text-center drop-shadow-2xl">為您準備好，專屬的靜謐角落。</div>
@@ -122,8 +128,8 @@ export default function Home() {
       </section>
 
       {/* Mask Reveal */}
-      <section className="mask-section h-[250vh] relative">
-        <div className="sticky top-0 h-screen flex items-center justify-center bg-oat overflow-hidden">
+      <section className="mask-section h-screen relative">
+        <div className="w-full h-full flex items-center justify-center bg-oat overflow-hidden relative">
           <h2 id="mask-bg-text" className="text-4xl md:text-6xl font-serif text-coffee text-center z-0 px-4 tracking-widest">探索，極致工藝</h2>
           <div className="mask-container z-10 absolute inset-0 w-full h-full">
             <img src="/cozy_coffee_latte_art_1790311102024.jpg" className="w-full h-full object-cover brightness-85" alt="Latte Art" />

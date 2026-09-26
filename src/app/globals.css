@@ -22,8 +22,7 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
-/* Stagger Text 隱藏 */
-.char, .word { opacity: 0; transform: translateY(110%); }
+/* 移除 CSS 強制隱藏，改由 GSAP 控制，避免文字卡在透明狀態 */
 .clip-text { clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%); line-height: 1.2; }
 
 /* SVG Mask Zoom Section */
