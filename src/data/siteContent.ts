@@ -18,24 +18,24 @@ export const galleryItems: GalleryItem[] = [
     id: "img-1",
     title: "靜謐的入口",
     category: "space",
-    imageUrl: "/cozy_coffee_entrance_1790311210385.jpg"
+    imageUrl: "./cozy_coffee_entrance_1790311210385.jpg"
   },
   {
     id: "img-2",
     title: "黑貓店長",
     category: "team",
-    imageUrl: "/black_cat_portrait_1790312058979.jpg"
+    imageUrl: "./black_cat_portrait_1790312058979.jpg"
   },
   {
     id: "img-3",
     title: "舒適的木質座位區",
     category: "space",
-    imageUrl: "/bg.jpg"
+    imageUrl: "./bg.jpg"
   },
   {
     id: "img-4",
     title: "精湛工藝，暖心拿鐵",
     category: "latte_art",
-    imageUrl: "/cozy_coffee_latte_art_1790311102024.jpg"
+    imageUrl: "./cozy_coffee_latte_art_1790311102024.jpg"
   }
 ];
