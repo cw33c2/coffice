@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import Flip from "gsap/Flip";
-import SplitType from "split-type";
+
 import { siteInfo, galleryItems } from "@/data/siteContent";
 
 export default function Home() {
@@ -14,21 +14,19 @@ export default function Home() {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger, Flip);
     const ctx = gsap.context(() => {
-      // 1. Hero Text (Visible on load, pin for 4 notches)
-      const title = new SplitType("#hero-title", { types: "chars" });
-      const sub = new SplitType("#hero-subtitle", { types: "words" });
-      
-      // 一載入就自動優雅浮現 (不要綁定滾輪隱藏)
-      gsap.fromTo(title.chars, { y: 20, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.05, duration: 1, ease: "expo.out" });
-      gsap.fromTo(sub.words, { y: 10, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.05, duration: 1, ease: "expo.out", delay: 0.5 });
-
-      // 滾輪滑動四格才轉到下一張圖 (約 500px)
-      ScrollTrigger.create({
-        trigger: ".hero-section",
-        start: "top top",
-        end: "+=500",
-        pin: true,
+      // 1. Hero Text (Static on load, fade out on scroll over 4 notches)
+      const tlHero = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".hero-section",
+          start: "top top",
+          end: "+=500", // 4 notches of scrolling
+          scrub: true,  // bind directly to scroll wheel
+          pin: true,
+        }
       });
+      
+      // 滾輪滑動時，標題與副標題慢慢往上淡出
+      tlHero.to(["#hero-title", "#hero-subtitle"], { opacity: 0, y: -50, duration: 1, stagger: 0.1 });
 
       // 2. Apple Sequence Animation
       const canvas = document.getElementById("scroll-canvas") as HTMLCanvasElement;
