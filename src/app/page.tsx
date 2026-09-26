@@ -41,6 +41,13 @@ export default function Home() {
         for (let i = 1; i <= frameCount; i++) {
           const img = new Image();
           img.src = `./sequence/ezgif-frame-${i.toString().padStart(3, '0')}.png`;
+          img.onload = () => {
+            // 手機網路較慢，圖片載入完成時若剛好是當前進度，立即補繪製！
+            if (seq.frame === i - 1 && canvasCtx) {
+              canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+              canvasCtx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            }
+          };
           images.push(img);
         }
 
@@ -61,7 +68,7 @@ export default function Home() {
           duration: 1,
           onUpdate: () => {
             const currentImg = images[seq.frame];
-            if (currentImg && currentImg.complete) {
+            if (currentImg && currentImg.complete && canvasCtx) {
               canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
               canvasCtx.drawImage(currentImg, 0, 0, canvas.width, canvas.height);
             }
