@@ -21,10 +21,23 @@ export default function Home() {
       gsap.to(title.chars, { y: 0, opacity: 1, stagger: 0.08, duration: 1.5, ease: "expo.out", delay: 0.2 });
       gsap.to(sub.words, { y: 0, opacity: 1, stagger: 0.05, duration: 1.2, ease: "expo.out", delay: 1.0 });
 
-      // 2. Video Scroll Animation
-      const video = document.getElementById("scroll-video") as HTMLVideoElement;
-      const initVideo = () => {
-        let tlVideo = gsap.timeline({
+      // 2. Apple Sequence Animation
+      const canvas = document.getElementById("scroll-canvas") as HTMLCanvasElement;
+      const canvasCtx = canvas?.getContext("2d");
+      if (canvas && canvasCtx) {
+        canvas.width = 1920;
+        canvas.height = 1080;
+        const frameCount = 20;
+        const images: HTMLImageElement[] = [];
+        const seq = { frame: 0 };
+
+        for (let i = 1; i <= frameCount; i++) {
+          const img = new Image();
+          img.src = `/sequence/ezgif-frame-${i.toString().padStart(3, '0')}.png`;
+          images.push(img);
+        }
+
+        const tlSequence = gsap.timeline({
           scrollTrigger: {
             trigger: ".video-section",
             start: "top top",
@@ -33,22 +46,37 @@ export default function Home() {
             pin: true,
           }
         });
-        if (video.duration) {
-          tlVideo.to(video, { currentTime: video.duration, ease: "none", duration: 1 }, 0);
-        }
-        tlVideo.to("#video-text-1", { opacity: 1, duration: 0.1 }, 0.1)
-               .to("#video-text-1", { opacity: 0, duration: 0.1 }, 0.4)
-               .to("#video-text-2", { opacity: 1, duration: 0.1 }, 0.6)
-               .to("#video-text-2", { opacity: 0, duration: 0.1 }, 0.9);
-      };
-      if (video.readyState >= 1) initVideo();
-      else video.addEventListener("loadedmetadata", initVideo);
+
+        tlSequence.to(seq, {
+          frame: frameCount - 1,
+          snap: "frame",
+          ease: "none",
+          duration: 1,
+          onUpdate: () => {
+            if (images[seq.frame] && images[seq.frame].complete) {
+              canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+              canvasCtx.drawImage(images[seq.frame], 0, 0, canvas.width, canvas.height);
+            }
+          }
+        }, 0);
+
+        images[0].onload = () => {
+          canvasCtx.drawImage(images[0], 0, 0, canvas.width, canvas.height);
+        };
+
+        tlSequence.to("#video-text-1", { opacity: 1, duration: 0.1 }, 0.1)
+                  .to("#video-text-1", { opacity: 0, duration: 0.1 }, 0.4)
+                  .to("#video-text-2", { opacity: 1, duration: 0.1 }, 0.6)
+                  .to("#video-text-2", { opacity: 0, duration: 0.1 }, 0.9);
+      }
 
       // 3. SVG Mask Reveal
-      let tlMask = gsap.timeline({
+      const tlMask = gsap.timeline({
         scrollTrigger: { trigger: ".mask-section", start: "top top", end: "+=1500", scrub: 0.8, pin: true }
       });
-      tlMask.to(".mask-container", { "--mask": "250vmax", duration: 1, ease: "power1.inOut" }, 0);
+      // Fix: Fade out and slide up the background text to prevent overlap when circle expands
+      tlMask.to("#mask-bg-text", { opacity: 0, y: -50, duration: 0.3, ease: "power2.out" }, 0);
+      tlMask.to(".mask-container", { "--mask": "250vmax", duration: 1, ease: "power1.inOut" }, 0.1);
       tlMask.to("#mask-reveal-text", { opacity: 1, duration: 0.2 }, 0.6);
     }, containerRef);
     return () => ctx.revert();
@@ -83,10 +111,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Video Scroll */}
+      {/* Sequence Scroll */}
       <section className="video-section h-[300vh] relative">
-        <div className="sticky top-0 h-screen w-full overflow-hidden bg-black">
-          <video id="scroll-video" src="/Woman_sweeping_outside_bakery_1080p_20260919220917.mp4" muted playsInline preload="auto" className="w-full h-full object-cover opacity-70"></video>
+        <div className="sticky top-0 h-screen w-full overflow-hidden bg-black flex items-center justify-center">
+          <canvas id="scroll-canvas" className="w-full h-full object-cover opacity-70 max-w-full"></canvas>
           <div id="video-text-1" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white font-serif text-4xl md:text-6xl tracking-widest opacity-0 w-full text-center drop-shadow-2xl">每一個清晨，從純粹開始。</div>
           <div id="video-text-2" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white font-serif text-4xl md:text-6xl tracking-widest opacity-0 w-full text-center drop-shadow-2xl">為您準備好，專屬的靜謐角落。</div>
         </div>
@@ -95,7 +123,7 @@ export default function Home() {
       {/* Mask Reveal */}
       <section className="mask-section h-[250vh] relative">
         <div className="sticky top-0 h-screen flex items-center justify-center bg-oat overflow-hidden">
-          <h2 className="text-4xl md:text-6xl font-serif text-coffee text-center z-0 px-4 tracking-widest">探索，極致工藝</h2>
+          <h2 id="mask-bg-text" className="text-4xl md:text-6xl font-serif text-coffee text-center z-0 px-4 tracking-widest">探索，極致工藝</h2>
           <div className="mask-container z-10 absolute inset-0 w-full h-full">
             <img src="/cozy_coffee_latte_art_1790311102024.jpg" className="w-full h-full object-cover brightness-85" alt="Latte Art" />
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
