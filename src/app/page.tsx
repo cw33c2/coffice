@@ -40,7 +40,7 @@ export default function Home() {
 
         for (let i = 1; i <= frameCount; i++) {
           const img = new Image();
-          img.src = `./sequence/ezgif-frame-${i.toString().padStart(3, '0')}.png`;
+          img.src = `/coffice/sequence/ezgif-frame-${i.toString().padStart(3, '0')}.png`;
           img.onload = () => {
             // 手機網路較慢，圖片載入完成時若剛好是當前進度，立即補繪製！
             if (seq.frame === i - 1 && canvasCtx) {
@@ -149,7 +149,7 @@ export default function Home() {
         <div className="w-full h-full flex items-center justify-center bg-oat overflow-hidden relative">
           <h2 id="mask-bg-text" className="text-4xl md:text-6xl font-serif text-coffee text-center z-0 px-4 tracking-widest">探索，極致工藝</h2>
           <div className="mask-container z-10 absolute inset-0 w-full h-full">
-            <img src="./cozy_coffee_latte_art_1790311102024.jpg" className="w-full h-full object-cover brightness-85" alt="Latte Art" />
+            <img src="/coffice/cozy_coffee_latte_art_1790311102024.jpg" className="w-full h-full object-cover brightness-85" alt="Latte Art" />
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <h2 id="mask-reveal-text" className="text-5xl md:text-7xl font-serif text-white opacity-0 tracking-widest text-center px-4 drop-shadow-2xl">
                 精湛工藝<br/><span className="text-3xl text-caramel italic mt-4 inline-block">暖心拿鐵</span>
