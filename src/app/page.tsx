@@ -14,19 +14,30 @@ export default function Home() {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger, Flip);
     const ctx = gsap.context(() => {
-      // 1. Hero Text Stagger
+      // 1. Hero Text Stagger (Scroll Driven)
       const title = new SplitType("#hero-title", { types: "chars" });
       const sub = new SplitType("#hero-subtitle", { types: "words" });
       
-      // 改動：強制先隱藏，然後等待 5 秒後才出現
-      gsap.fromTo(title.chars, 
+      const tlHero = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".hero-section",
+          start: "top top",
+          end: "+=1500", // 使用者向下滾動 1500px 來解鎖文字
+          scrub: 1,
+          pin: true,
+        }
+      });
+
+      tlHero.fromTo(title.chars, 
         { y: 50, opacity: 0 }, 
-        { y: 0, opacity: 1, stagger: 0.15, duration: 2.5, ease: "expo.out", delay: 5.0 }
-      );
-      gsap.fromTo(sub.words, 
+        { y: 0, opacity: 1, stagger: 0.1, duration: 1 }
+      )
+      .fromTo(sub.words, 
         { y: 20, opacity: 0 }, 
-        { y: 0, opacity: 1, stagger: 0.1, duration: 2.0, ease: "expo.out", delay: 6.0 }
-      );
+        { y: 0, opacity: 1, stagger: 0.1, duration: 1 },
+        "-=0.5"
+      )
+      .to({}, { duration: 0.5 }); // 在解除固定前保留一點緩衝
 
       // 2. Apple Sequence Animation
       const canvas = document.getElementById("scroll-canvas") as HTMLCanvasElement;
@@ -109,7 +120,7 @@ export default function Home() {
   return (
     <main ref={containerRef}>
       {/* Hero */}
-      <section className="h-screen flex flex-col justify-center items-center text-center px-4 relative z-10">
+      <section className="hero-section h-screen flex flex-col justify-center items-center text-center px-4 relative z-10">
         <div className="clip-text overflow-hidden">
           <h1 id="hero-title" className="font-serif text-6xl md:text-9xl font-bold text-gradient pb-2 tracking-wide">{siteInfo.name}</h1>
         </div>
