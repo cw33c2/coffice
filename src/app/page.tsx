@@ -138,9 +138,14 @@ export default function Home() {
       {/* Sequence Scroll */}
       <section className="video-section h-screen relative">
         <div className="w-full h-full overflow-hidden bg-black flex items-center justify-center">
-          <canvas id="scroll-canvas" className="w-full h-full object-cover opacity-70 max-w-full"></canvas>
-          <div id="video-text-1" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white font-serif text-4xl md:text-6xl tracking-widest opacity-0 w-full text-center drop-shadow-2xl">每一個清晨，從純粹開始。</div>
-          <div id="video-text-2" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white font-serif text-4xl md:text-6xl tracking-widest opacity-0 w-full text-center drop-shadow-2xl">為您準備好，專屬的靜謐角落。</div>
+          <img 
+            src="/coffice/sequence/ezgif-frame-001.png" 
+            className="absolute inset-0 w-full h-full object-cover opacity-70 z-0" 
+            alt="poster" 
+          />
+          <canvas id="scroll-canvas" className="w-full h-full object-cover opacity-100 max-w-full relative z-10"></canvas>
+          <div id="video-text-1" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white font-serif text-4xl md:text-6xl tracking-widest opacity-0 w-full text-center drop-shadow-2xl z-20">每一個清晨，從純粹開始。</div>
+          <div id="video-text-2" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white font-serif text-4xl md:text-6xl tracking-widest opacity-0 w-full text-center drop-shadow-2xl z-20">為您準備好，專屬的靜謐角落。</div>
         </div>
       </section>
 

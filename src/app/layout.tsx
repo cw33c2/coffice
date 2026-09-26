@@ -17,6 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-TW" className={`${inter.variable} ${playfair.variable}`}>
+      <head>
+        <link rel="preload" as="image" href="/coffice/sequence/ezgif-frame-001.png" />
+      </head>
       <body className="font-sans antialiased bg-oat text-coffee overflow-x-hidden">
         {children}
       </body>
