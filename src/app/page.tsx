@@ -14,30 +14,21 @@ export default function Home() {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger, Flip);
     const ctx = gsap.context(() => {
-      // 1. Hero Text Stagger (Scroll Driven)
+      // 1. Hero Text (Visible on load, pin for 4 notches)
       const title = new SplitType("#hero-title", { types: "chars" });
       const sub = new SplitType("#hero-subtitle", { types: "words" });
       
-      const tlHero = gsap.timeline({
-        scrollTrigger: {
-          trigger: ".hero-section",
-          start: "top top",
-          end: "+=1500", // 使用者向下滾動 1500px 來解鎖文字
-          scrub: 1,
-          pin: true,
-        }
-      });
+      // 一載入就自動優雅浮現 (不要綁定滾輪隱藏)
+      gsap.fromTo(title.chars, { y: 20, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.05, duration: 1, ease: "expo.out" });
+      gsap.fromTo(sub.words, { y: 10, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.05, duration: 1, ease: "expo.out", delay: 0.5 });
 
-      tlHero.fromTo(title.chars, 
-        { y: 50, opacity: 0 }, 
-        { y: 0, opacity: 1, stagger: 0.1, duration: 1 }
-      )
-      .fromTo(sub.words, 
-        { y: 20, opacity: 0 }, 
-        { y: 0, opacity: 1, stagger: 0.1, duration: 1 },
-        "-=0.5"
-      )
-      .to({}, { duration: 0.5 }); // 在解除固定前保留一點緩衝
+      // 滾輪滑動四格才轉到下一張圖 (約 500px)
+      ScrollTrigger.create({
+        trigger: ".hero-section",
+        start: "top top",
+        end: "+=500",
+        pin: true,
+      });
 
       // 2. Apple Sequence Animation
       const canvas = document.getElementById("scroll-canvas") as HTMLCanvasElement;
@@ -89,13 +80,19 @@ export default function Home() {
       }
 
       // 3. SVG Mask Reveal
+      // 避免一開始重疊：先將遮罩圓圈隱藏
+      gsap.set(".mask-container", { opacity: 0 }); 
+
       const tlMask = gsap.timeline({
         scrollTrigger: { trigger: ".mask-section", start: "top top", end: "+=1500", scrub: 0.8, pin: true }
       });
-      // Fix: Fade out and slide up the background text to prevent overlap when circle expands
+      // 往下滾動時，背景文字先退場
       tlMask.to("#mask-bg-text", { opacity: 0, y: -50, duration: 0.3, ease: "power2.out" }, 0);
-      tlMask.to(".mask-container", { "--mask": "250vmax", duration: 1, ease: "power1.inOut" }, 0.1);
-      tlMask.to("#mask-reveal-text", { opacity: 1, duration: 0.2 }, 0.6);
+      // 文字退場後，圓形遮罩才淡入並開始放大
+      tlMask.to(".mask-container", { opacity: 1, duration: 0.1 }, 0.2);
+      tlMask.to(".mask-container", { "--mask": "250vmax", duration: 1, ease: "power1.inOut" }, 0.2);
+      // 最後顯示內部的文字
+      tlMask.to("#mask-reveal-text", { opacity: 1, duration: 0.2 }, 0.8);
     }, containerRef);
     return () => ctx.revert();
   }, []);
